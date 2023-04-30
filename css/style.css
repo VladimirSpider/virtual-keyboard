@@ -25,7 +25,8 @@
     margin-bottom: 10px;
 }
 
-.keyboard {
+.keyboardEng,
+.keyboardRu {
     width: 715px;
     height: 251px;
     margin: 0 auto;
@@ -36,11 +37,16 @@
     margin-bottom: 10px;
 }
 
+.hide-keyboard {
+    display: none;
+}
+
 .line {
     display: flex;
 }
 
 .button-block {
+    cursor: pointer;
     width: 40px;
     height: 40px;
     color: #ffffff;
@@ -52,6 +58,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: 0.5s;
+}
+
+.button-block:hover {
+    background: rgb(25, 39, 203);
 }
 
 .hide-value {
@@ -73,6 +84,11 @@
 .down,
 .right {
     background-color: #222222;
+}
+
+.active {
+    border-radius: 50px;
+    background: rgba(25, 39, 203, 0.5);
 }
 
 .backspace,
