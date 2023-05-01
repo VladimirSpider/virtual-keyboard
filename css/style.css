@@ -4,6 +4,13 @@
     padding: 0;
 }
 
+body {
+    height: 100vh;
+    background-image: url(../assets/images/background.jpg);
+    background-repeat: round;
+    background-size: cover;
+}
+
 .wrapper {
     padding: 10px 0;
     display: flex;
@@ -23,6 +30,7 @@
     width: 530px;
     height: 160px;
     margin-bottom: 10px;
+    padding: 10px;
 }
 
 .keyboardEng,
@@ -110,5 +118,11 @@
 
 .space {
     width: 310px;
+}
+
+.support {
+    color: white;
+    font-weight: 900;
+    font-size: 20px;
 }
 

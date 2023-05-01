@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	createTag('textarea', 'paper', wrapper);
 	createTag('div', 'keyboard-block', wrapper);
 	const keyboardBlock = document.querySelector('.keyboard-block');
+	const paper = document.querySelector('.paper');
 	
 	
 	createTag('div', 'keyboardEng', keyboardBlock);
@@ -84,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					div.classList.add('button-block', buttonsCodes[index][innerIndex]);
 					button.forEach((value, index) => {
 						let span = document.createElement('span');
+						if (index === 0) span.classList.add('show-value');
 						if (index === 1) span.classList.add('hide-value');
 						span.innerHTML = button[index];
 						div.append(span);
@@ -97,11 +99,84 @@ document.addEventListener('DOMContentLoaded', function() {
 	getKeyBoard(buttonsEng, keyboardEng);
 	getKeyBoard(buttonsRu, keyboardRu);
 	
+	const mouseHandler = (el) => {
+		el.classList.toggle('active');
+	}
+	
+	const mouseTextHandler = (el) => {
+		const value = el.querySelector('.show-value');
+		if (value) {
+			paper.value += value.textContent;
+		}
+		
+		if (el.classList.contains('Space')) {
+			paper.value += ' ';
+		}
+
+		if (el.classList.contains('Tab')) {
+			paper.value += '  ';
+		}
+
+		if (el.classList.contains('ArrowUp') || el.classList.contains('ArrowDown') || el.classList.contains('ArrowLeft') || el.classList.contains('ArrowRight')) {
+			const value = el.querySelector('span').textContent;
+			paper.value += value;
+		}
+
+		if (el.classList.contains('Enter')) {
+			paper.value += '\n';
+		}
+
+		if (el.classList.contains('Backspace')) {
+			paper.value = paper.value.slice(0, paper.value.length - 1);
+		}
+	}
+	
+	keyboardEng.onmousedown = function(event) {
+		let button = event.target.closest('div');
+		
+		if (!button) return;
+		
+		if (!keyboardEng.contains(button)) return;
+		
+		mouseHandler(button);
+		mouseTextHandler(button);
+	};
+	
+	keyboardRu.onmousedown = function(event) {
+		let button = event.target.closest('div');
+		
+		if (!button) return;
+		
+		if (!keyboardRu.contains(button)) return;
+		
+		mouseHandler(button);
+		mouseTextHandler(button);
+	};
+	
+	keyboardEng.onmouseup = function(event) {
+		let button = event.target.closest('div');
+		
+		if (!button) return;
+		
+		if (!keyboardEng.contains(button)) return;
+		
+		mouseHandler(button);
+	};
+	
+	keyboardRu.onmouseup = function(event) {
+		let button = event.target.closest('div');
+		
+		if (!button) return;
+		
+		if (!keyboardRu.contains(button)) return;
+		
+		mouseHandler(button);
+	};
+	
 	function runOnKeys(func, ...codes) {
 		let pressed = new Set();
 		
 		document.addEventListener('keydown', function(event) {
-			console.log('hi');
 			let buttons= document.querySelectorAll(`.${event.code}`);
 			buttons.forEach((button) => {
 				button.classList.add('active');
@@ -112,9 +187,43 @@ document.addEventListener('DOMContentLoaded', function() {
 				let allSpan = document.querySelectorAll('span');
 				allSpan.forEach((span) => {
 					if (!span.classList.contains('technical')) {
-						span.classList.contains('hide-value') ? span.classList.remove('hide-value') : span.classList.add('hide-value');
+						if (span.classList.contains('hide-value')) {
+							span.classList.remove('hide-value');
+							span.classList.add('show-value');
+						} else {
+							span.classList.add('hide-value');
+							span.classList.remove('show-value');
+						}
 					}
 				});
+			}
+			
+			const button = state.language === 'en' ? keyboardEng.querySelector(`.${event.code}`) : keyboardRu.querySelector(`.${event.code}`);
+			const value = button.querySelector('.show-value');
+			if (value) {
+				paper.value += value.textContent;
+			}
+			
+			if (event.code === 'Space') {
+				paper.value += ' ';
+			}
+			
+			if (event.code === 'Tab') {
+				paper.value += ' ';
+			}
+			
+			if (event.code === 'ArrowUp' || event.code === 'ArrowDown' || event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
+				const button = document.querySelector(`.${event.code}`);
+				const value = button.querySelector('span').textContent;
+				paper.value += value;
+			}
+			
+			if (event.code === 'Enter') {
+				paper.value += '\n';
+			}
+			
+			if (event.code === 'Backspace') {
+				paper.value = paper.value.slice(0, paper.value.length - 1);
 			}
 			
 			for (let code of codes) {
@@ -138,7 +247,13 @@ document.addEventListener('DOMContentLoaded', function() {
 				let allSpan = document.querySelectorAll('span');
 				allSpan.forEach((span) => {
 					if (!span.classList.contains('technical')) {
-						span.classList.contains('hide-value') ? span.classList.remove('hide-value') : span.classList.add('hide-value');
+						if (span.classList.contains('hide-value')) {
+							span.classList.remove('hide-value');
+							span.classList.add('show-value');
+						} else {
+							span.classList.add('hide-value');
+							span.classList.remove('show-value');
+						}
 					}
 				});
 			}
